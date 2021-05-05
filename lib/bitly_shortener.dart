@@ -1,8 +1,9 @@
-library flutter_shortener;
-
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart';
+
+const String _authHeader = "authorization";
+const String _contentTypeHeader = "content-type";
+const String _jsonContentType = "application/json";
 
 class _ErrorsObject {
   String? field;
@@ -285,8 +286,8 @@ class BitLyShortener {
       Uri.parse(_shortUri),
       body: _body,
       headers: {
-        HttpHeaders.contentTypeHeader: ContentType.json.value,
-        HttpHeaders.authorizationHeader: "Bearer $accessToken",
+        _contentTypeHeader: _jsonContentType,
+        _authHeader: "Bearer $accessToken",
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -342,8 +343,8 @@ class BitLyShortener {
       Uri.parse(_bitlinkUri),
       body: _body,
       headers: {
-        HttpHeaders.contentTypeHeader: ContentType.json.value,
-        HttpHeaders.authorizationHeader: "Bearer $accessToken",
+        _contentTypeHeader: _jsonContentType,
+        _authHeader: "Bearer $accessToken",
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -390,8 +391,8 @@ class BitLyShortener {
       Uri.parse("$_bitlinkUri/${linkData.link}"),
       body: _body,
       headers: {
-        HttpHeaders.contentTypeHeader: ContentType.json.value,
-        HttpHeaders.authorizationHeader: "Bearer $accessToken",
+        _contentTypeHeader: _jsonContentType,
+        _authHeader: "Bearer $accessToken",
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -430,8 +431,8 @@ class BitLyShortener {
     final response = await get(
       Uri.parse("$_bitlinkUri/$link"),
       headers: {
-        HttpHeaders.contentTypeHeader: ContentType.json.value,
-        HttpHeaders.authorizationHeader: "Bearer $accessToken",
+        _contentTypeHeader: _jsonContentType,
+        _authHeader: "Bearer $accessToken",
       },
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
