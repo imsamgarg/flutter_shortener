@@ -99,7 +99,7 @@ class BitLyLinkData {
   String? id;
   String? longUrl;
   String? title;
-  String? archived;
+  bool? archived;
   String? createdAt;
   String? createdBy;
   String? clientId;
