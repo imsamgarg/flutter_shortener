@@ -26,6 +26,8 @@ class _ErrorsObject {
   }
 }
 
+///[BitLyException]--
+///thrown on each unsuccessful request to bit.ly api
 class BitLyException implements Exception {
   String? message;
   String? description;
@@ -55,6 +57,9 @@ class BitLyException implements Exception {
   }
 }
 
+///[BitLinkParameters] class to create a bitlink.
+///it hold all the data to create a Custom bitlink.
+///Read official documentation to know more about BitLinks.
 class BitLinkParameters {
   String? title;
   List<String?>? tags;
@@ -93,10 +98,21 @@ class BitLinkParameters {
   String toString() => _generateBody("", "");
 }
 
+///[BitLyLinkData] class that hold all the metadata of the link shortened.
+///an instance of the class will be returned after each successful request to bit.ly apis
+///containing all the metadata send by the api
 class BitLyLinkData {
+  ///it is of type map.
+  ///official documentation is not clear about that property.
+  ///except it to contain group uri in most cases
   dynamic? references;
+
+  ///Shortened Link
   String? link;
+
+  ///shortened link id
   String? id;
+
   String? longUrl;
   String? title;
   bool? archived;
@@ -145,18 +161,19 @@ class BitLyLinkData {
 
   String _generateBody() {
     var map = <String, dynamic>{};
-    map["references"] = references;
-    map["link"] = link;
-    map["id"] = id;
-    map["long_url"] = longUrl;
-    map["title"] = title;
-    map["archived"] = archived;
-    map["created_at"] = createdAt;
-    map["created_by"] = createdBy;
-    map["client_id"] = clientId;
-    map["custom_bitlinks"] = customBitlinks;
-    map["tags"] = tags;
-    if (deeplinks != null) {
+    if (references != null) map["references"] = references;
+    if (link != null) map["link"] = link;
+    if (id != null) map["id"] = id;
+    if (longUrl != null) map["long_url"] = longUrl;
+    if (title != null) map["title"] = title;
+    if (archived != null) map["archived"] = archived;
+    if (createdAt != null) map["created_at"] = createdAt;
+    if (createdBy != null) map["created_by"] = createdBy;
+    if (clientId != null) map["client_id"] = clientId;
+    if (customBitlinks == null ? false : customBitlinks!.isNotEmpty)
+      map["custom_bitlinks"] = customBitlinks;
+    if (tags == null ? false : tags!.isNotEmpty) map["tags"] = tags;
+    if (deeplinks == null ? false : deeplinks!.isNotEmpty) {
       map["deeplinks"] = deeplinks?.map((v) => v.toJson()).toList();
     }
     return jsonEncode(map);
@@ -332,9 +349,18 @@ class BitLyShortener {
   /// ```
   ///Check out official documentation for more info.
   Future<BitLyLinkData> generateBitLyLink({
+    ///Additional deepLinks parameters for creating a bitlink link
     required BitLinkParameters parameters,
+
+    ///link you want to generate shortLink of
+    /// Must not be empty or null
     required String longUrl,
+
+    ///Custom Domain Name.
+    ///by default set to bit.ly
     String domain = "bit.ly",
+
+    ///Group GUID
     String? groupGuid,
   }) async {
     final _body = parameters._generateBody(longUrl, groupGuid, domain);
@@ -384,11 +410,18 @@ class BitLyShortener {
   /// }
   /// ```
   ///Check out official documentation for more info.
-  Future<BitLyLinkData> updateBitLyLink(
-      {required BitLyLinkData linkData}) async {
+  Future<BitLyLinkData> updateBitLyLink({
+    ///linkData must have a valid id field
+    required BitLyLinkData linkData,
+  }) async {
+    if (linkData.id == null ? true : linkData.id!.isEmpty)
+      throw Exception(
+        "id Must Not be Null Or Empty ",
+      );
+
     final _body = linkData.toString();
     final response = await patch(
-      Uri.parse("$_bitlinkUri/${linkData.link}"),
+      Uri.parse("$_bitlinkUri/${linkData.id}"),
       body: _body,
       headers: {
         _contentTypeHeader: _jsonContentType,
@@ -427,7 +460,15 @@ class BitLyShortener {
   /// ```
   ///
   ///Check out official documentation for more info.
-  Future<BitLyLinkData> retrieveBitLyLink({required String link}) async {
+  Future<BitLyLinkData> retrieveBitLyLink({
+    ///Link must be a valid bitly link.
+    ///else it would throw [FormatException]
+    ///
+    ///This link can be extracted from [BitLyLinkData]'s id field.
+    ///example:-
+    /// --- bit.ly/234sxsd4
+    required String link,
+  }) async {
     final response = await get(
       Uri.parse("$_bitlinkUri/$link"),
       headers: {
