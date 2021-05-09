@@ -5,3 +5,4 @@
 library flutter_shortener;
 
 export 'bitly_shortener.dart';
+export 'shorte_st_shortener.dart';

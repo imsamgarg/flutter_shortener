@@ -1,8 +1,8 @@
 name: flutter_shortener
-description: A library for generating short links from multiple providers. Supported vendors:- Bit.ly
-version: 0.1.3
-author: Smile garg<imsmilegarg@gmail.com>
-homepage: https://github.com/imsmilegarg/flutter_shortener.git
+description: A library for generating short links from multiple providers.Only some providers are supported.
+version: 0.2.0
+author: Sam garg<imsamgarg@gmail.com>
+homepage: https://github.com/imsamgarg/flutter_shortener.git
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
