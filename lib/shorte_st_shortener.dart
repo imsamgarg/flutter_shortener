@@ -77,12 +77,13 @@ class ShorteStShortener {
       body: {'urlToShorten': link},
     );
     if (response.statusCode == 200) {
-      if (response.headers["Content-Type"] == "application/json") {
+      if (response.headers["content-type"] == "application/json") {
         return ShorteStLinkData._fromJson(jsonDecode(response.body));
       }
       throw Exception(
-          "Bad Request!! There might be a problem with your access token");
+          "Bad Request!! Your link might be invalid Or There might be a problem with your access token");
     }
-    throw Exception("Bad Request!! Your link might be invalid.");
+    throw Exception(
+        "Bad Request!! Your link might be invalid Or There might be a problem with your access token");
   }
 }
