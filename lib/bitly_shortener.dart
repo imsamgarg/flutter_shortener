@@ -247,7 +247,6 @@ class _Deeplinks {
 /// ```
 ///Check out official documentation for more info.
 class BitLyShortener {
-  ///Access Token
   ///Access Token is required and must not be null or empty
   final String accessToken;
 
