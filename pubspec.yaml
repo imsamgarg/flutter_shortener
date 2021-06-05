@@ -1,6 +1,6 @@
 name: flutter_shortener
 description: A library for generating short links from multiple providers.Only some providers are supported.
-version: 0.2.0
+version: 0.3.0
 author: Sam garg<imsamgarg@gmail.com>
 homepage: https://github.com/imsamgarg/flutter_shortener.git
 
