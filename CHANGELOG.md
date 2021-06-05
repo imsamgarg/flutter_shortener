@@ -1,3 +1,7 @@
+## [0.3.0]
+
+* tinyurl added
+
 ## [0.2.0]
 
 * shorte.st added
